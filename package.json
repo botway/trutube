@@ -1,0 +1,36 @@
+{
+  "name": "youtubefun",
+  "version": "1.0.0",
+  "description": "Exploring youtube API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "8.11.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/botway/youtubefun.git"
+  },
+  "keywords": [
+    "youtube"
+  ],
+  "author": "botway",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/botway/youtubefun/issues"
+  },
+  "homepage": "https://github.com/botway/youtubefun#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "random-words": "^1.1.0",
+    "rword": "^3.0.0",
+    "simple-youtube-api": "^5.1.1",
+    "translate": "^1.0.3",
+    "youtube-api-v3-search": "^1.1.3"
+  }
+}

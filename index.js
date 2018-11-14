@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+var bodyParser = require("body-parser");
 const path = require("path");
 const { rword } = require("rword");
 const randomWords = require("random-words");
@@ -7,6 +8,10 @@ const translate = require("translate");
 const searchYoutube = require("youtube-api-v3-search");
 const YouTube = require("simple-youtube-api");
 const langArr = require("./lang");
+const db = require("./db").db;
+const util = require("util");
+
+exports.app = app;
 
 let secrets;
 if (process.env.NODE_ENV == "production") {
@@ -19,20 +24,21 @@ const youtube = new YouTube(secrets.youtube_key);
 translate.engine = "yandex";
 translate.key = secrets.yandex_key;
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-// app.get("/", async (req, res) => {
-//     const phrase = genPhrase(2, 4);
-//     const translate = await transPhrase(phrase, null);
-//     const data = await getVideos(translate, 1);
-//     res.render("index", { data: data });
-// });
 app.get("/", async (req, res) => {
     const phrase = genPhrase(2, 4);
     const translate = await transPhrase(phrase, null);
     const result = await getVideos(translate, 1);
     res.render("main", { data: result });
+    // db.each("SELECT * from Vid_IDs", function(err, row) {
+    //     if (row) {
+    //         console.log("record:", row);
+    //     }
+    // });
 });
 
 app.get("/randomvid", async (req, res) => {
@@ -44,24 +50,18 @@ app.get("/randomvid", async (req, res) => {
     res.json(result);
 });
 
-// app.get("/trailers", async (req, res) => {
-//     const phrase = `movie trailer ${genPhrase(2, 4)}`;
-//     const data = await getVideos(phrase, 1);
-//     res.render("index", { data: data });
-// });
-//
-// app.get("/music", async (req, res) => {
-//     const phrase = `music song ${genPhrase(1, 2)}`;
-//     const translate = await transPhrase(phrase, null);
-//     const data = await getVideos(translate, 1);
-//     res.render("index", { data: data });
-// });
-//
-// app.get("/tutorials", async (req, res) => {
-//     const phrase = `tutorial ${genPhrase(2, 4)}`;
-//     const data = await getVideos(phrase, 1);
-//     res.render("player", { data: data });
-// });
+app.post("/savevid", async (req, res) => {
+    console.log("savevid", req.body);
+    //prettier-ignore
+    db.serialize(() => {
+        db.run(`INSERT INTO Vid_IDs (vid_id) VALUES(?)`, [req.body.id], function(err){
+            if (err) {
+                return console.log(err.message);
+            }
+            res.json({ data: this.lastID });
+        });
+    });
+});
 
 const getVideos = async (query, amount) => {
     let options = {

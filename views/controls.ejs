@@ -1,7 +1,14 @@
 <button id="next">NEXT</button>
+<button id="like">LIKE</button>
 <script>
-    var button = document.getElementById("next");
-    button.addEventListener("click", function(){
+    var next = document.getElementById("next");
+    var like = document.getElementById("like");
+
+    next.addEventListener("click", function(){
         playNext(keyword);
+    });
+
+    like.addEventListener("click", function(){
+        saveVidId(data.id);
     });
 </script>

@@ -33,6 +33,14 @@
                      })
                 })
             }
+
+            function saveVidId(id){
+                axios.post("/savevid",{ id: id })
+                    .then(result => {
+                    console.log("vid was saved " + JSON.stringify(result.data.data));
+                })
+            }
+
             function clearDate(str){
                return str.slice(0,-14)
             }

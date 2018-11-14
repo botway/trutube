@@ -22,11 +22,17 @@ translate.key = secrets.yandex_key;
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
+// app.get("/", async (req, res) => {
+//     const phrase = genPhrase(2, 4);
+//     const translate = await transPhrase(phrase, null);
+//     const data = await getVideos(translate, 1);
+//     res.render("index", { data: data });
+// });
 app.get("/", async (req, res) => {
     const phrase = genPhrase(2, 4);
     const translate = await transPhrase(phrase, null);
-    const data = await getVideos(translate, 1);
-    res.render("index", { data: data });
+    const result = await getVideos(translate, 1);
+    res.render("main", { data: result });
 });
 
 app.get("/randomvid", async (req, res) => {
@@ -34,35 +40,36 @@ app.get("/randomvid", async (req, res) => {
     if (req.query.translate)
         phrase = await transPhrase(phrase, req.query.translate);
     const result = await getVideos(phrase, 1);
+    console.log(phrase);
     res.json(result);
 });
 
-app.get("/trailers", async (req, res) => {
-    const phrase = `movie trailer ${genPhrase(2, 4)}`;
-    const data = await getVideos(phrase, 1);
-    res.render("index", { data: data });
-});
-
-app.get("/music", async (req, res) => {
-    const phrase = `music song ${genPhrase(1, 2)}`;
-    const translate = await transPhrase(phrase, null);
-    const data = await getVideos(translate, 1);
-    res.render("index", { data: data });
-});
-
-app.get("/tutorials", async (req, res) => {
-    const phrase = `tutorial ${genPhrase(2, 4)}`;
-    const data = await getVideos(phrase, 1);
-    res.render("player", { data: data });
-});
+// app.get("/trailers", async (req, res) => {
+//     const phrase = `movie trailer ${genPhrase(2, 4)}`;
+//     const data = await getVideos(phrase, 1);
+//     res.render("index", { data: data });
+// });
+//
+// app.get("/music", async (req, res) => {
+//     const phrase = `music song ${genPhrase(1, 2)}`;
+//     const translate = await transPhrase(phrase, null);
+//     const data = await getVideos(translate, 1);
+//     res.render("index", { data: data });
+// });
+//
+// app.get("/tutorials", async (req, res) => {
+//     const phrase = `tutorial ${genPhrase(2, 4)}`;
+//     const data = await getVideos(phrase, 1);
+//     res.render("player", { data: data });
+// });
 
 const getVideos = async (query, amount) => {
     let options = {
         type: "video",
         duration: "short",
-        safeSearch: "none",
-        publishedBefore: "2009-01-01T00:00:00Z"
+        safeSearch: "none"
     };
+    // publishedBefore: "2009-01-01T00:00:00Z"
     const videos = await youtube.searchVideos(query, amount, options);
     return videos;
 };

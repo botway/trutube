@@ -1,32 +1,15 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
-        <h1></h1>
-        <div id="player"></div>
-        <h3></h3>
-        <button id="next">NEXT</button>
-    </body>
-</html>
-<script src="http://www.youtube.com/player_api"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<h1></h1>
+<div id="player"></div>
+<h3></h3>
 <script>
-       var data = <%- JSON.stringify(data[0]) %>;
-       console.log(data);
-       var button = document.getElementById("next");
-       button.addEventListener("click", playNext)
-       var title = document.getElementsByTagName("H1")[0]
-       var published = document.getElementsByTagName("H3")[0]
-       title.innerHTML = data.title;
-       published.innerHTML ="published at " + clearDate(data.publishedAt);
-       console.log(publis);
-       // create youtube player
-       var videoId = data.id;
-       var player;
-       function onYouTubePlayerAPIReady() {
+        var title = document.getElementsByTagName("H1")[0]
+        var published = document.getElementsByTagName("H3")[0]
+        title.innerHTML = data.title;
+        published.innerHTML ="published at " + clearDate(data.publishedAt);
+        // create youtube player
+        var videoId = data.id;
+        var player;
+        function onYouTubePlayerAPIReady() {
            player = new YT.Player('player', {
              width: '640',
              height: '390',
@@ -36,38 +19,17 @@
                onStateChange: onPlayerStateChange
              }
            });
-       }
+        }
 
-       // autoplay video
-       function onPlayerReady(event) {
+        // autoplay video
+        function onPlayerReady(event) {
            event.target.playVideo();
-       }
+        }
 
-       // when video ends
-       function onPlayerStateChange(event) {
+        // when video ends
+        function onPlayerStateChange(event) {
            if(event.data === 0) {
-               playNext()
+               playNext(keyword)
            }
-       }
-
-       function playNext(){
-           console.log("next");
-           axios.get("/randomvid",{
-               params:{
-                   keyword: "",
-                   translate: null
-               }
-           }).then(result => {
-               videoId = result.data[0].id;
-               title.innerHTML = result.data[0].title
-               published.innerHTML = "published at " + clearDate(result.data[0].publishedAt)
-               player.loadVideoById({
-                    videoId: videoId,
-                    startSeconds: 0
-                })
-           })
-       }
-       function clearDate(str){
-           return str.slice(0,-14)
-       }
+        }
    </script>

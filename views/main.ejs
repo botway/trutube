@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>TRUTUBE</title>
+        <link rel="stylesheet" href="./css/jquery-ui.min.css">
+    </head>
+    <body>
+        <script src="js/jquery.js"></script>
+        <script src="js/jquery-ui.min.js"></script>
+        <script src="http://www.youtube.com/player_api"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            // $( "#date" ).slider();
+            var data = <%-JSON.stringify(data[0]) %>;
+            var keyword="";
+
+            function playNext(keyword){
+                axios.get("/randomvid",{
+                    params:{
+                        keyword: keyword,
+                        translate: null
+                    }
+                }).then(result => {
+                    data = result.data[0];
+                    console.log(result);
+                    videoId = result.data[0].id;
+                    title.innerHTML = result.data[0].title
+                    published.innerHTML = "published at " + clearDate(result.data[0].publishedAt)
+                    player.loadVideoById({
+                         videoId: videoId,
+                         startSeconds: 0
+                     })
+                })
+            }
+            function clearDate(str){
+               return str.slice(0,-14)
+            }
+        </script>
+        <%- include('nav'); -%>
+        <%- include('player'); -%>
+        <div id="date"></div>
+        <%- include('controls'); -%>
+        <%- include('footer'); -%>
+    </body>
+</html>

@@ -30,19 +30,29 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", async (req, res) => {
-    console.log("main");
-    const phrase = genPhrase(2, 4);
-    const translate = await transPhrase(phrase, null);
-    const result = await getVideos(translate, 1);
+    const lang = getRandomLang();
+    const params = {
+        publishedBefore: "2018-01-01T00:00:00Z",
+        relevanceLanguage: lang,
+        duration: "any"
+    };
+    let phrase = genPhrase(1, 4);
+    phrase = await transPhrase(phrase, lang);
+    const result = await getVideos(phrase, 1, params);
     res.render("main", { data: result });
 });
 
 app.get("/randomvid", async (req, res) => {
-    console.log("random vid");
-    let phrase = `${req.query.keyword} ${genPhrase(2, 4)}`;
-    if (req.query.translate)
-        phrase = await transPhrase(phrase, req.query.translate);
-    const result = await getVideos(phrase, 1);
+    let lang =
+        req.query.relevanceLanguage == "rnd"
+            ? getRandomLang()
+            : req.query.relevanceLanguage;
+    req.query.relevanceLanguage = lang;
+    let phrase = `${req.query.keyword} ${genPhrase(1, 4)}`;
+    if (lang) {
+        phrase = await transPhrase(phrase, lang);
+    }
+    const result = await getVideos(phrase, 1, req.query);
     console.log(phrase);
     res.json(result);
 });
@@ -61,12 +71,10 @@ app.post("/savevid", async (req, res) => {
 });
 
 app.get("/gallery", async (req, res) => {
-    console.log("gallery");
     let promises = [];
     const data = await db.getAsync(
-        "SELECT * from Vid_IDs ORDER BY rowid DESC LIMIT 10"
+        "SELECT * from Vid_IDs ORDER BY rowid DESC LIMIT 5"
     );
-    // console.log(data);
     data.forEach(elem => {
         promises.push(youtube.getVideoByID(elem.vid_id));
     });
@@ -74,11 +82,14 @@ app.get("/gallery", async (req, res) => {
     res.render("main", { data: vids });
 });
 
-const getVideos = async (query, amount) => {
+const getVideos = async (query, amount, params) => {
+    console.log(query, params);
     let options = {
         type: "video",
-        duration: "short",
-        safeSearch: "none"
+        duration: params.duration,
+        safeSearch: "none",
+        publishedBefore: params.publishedBefore,
+        relevanceLanguage: params.relevanceLanguage
     };
     // publishedBefore: "2009-01-01T00:00:00Z"
     const videos = await youtube.searchVideos(query, amount, options);
@@ -86,7 +97,6 @@ const getVideos = async (query, amount) => {
 };
 
 const transPhrase = async (phrase, lang) => {
-    if (!lang) lang = langArr[Math.floor(Math.random() * langArr.length)];
     const translated = await translate(phrase, lang);
     return translated;
 };
@@ -95,7 +105,9 @@ const genPhrase = (min, max) => {
     let phrase = randomWords({ exactly: getRandomInt(min, max), join: " " });
     return phrase;
 };
-
+function getRandomLang() {
+    return langArr[Math.floor(Math.random() * langArr.length)];
+}
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }

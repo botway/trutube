@@ -1,7 +1,8 @@
 <div id="nav">
     <button name="" id="home"> HOME </button>
     <button name="movie trailer" id="trailers"> TRAILERS </button>
-    <button name="tutorial" id="tuts"> TUTS </button>
+    <button name="music" id="music"> MUSIC </button>
+    <button name="" id="options"> OPTIONS </button>
     <button id="gallery"> GALLERY </button>
 </div>
 <script>
@@ -17,15 +18,19 @@
             window.location.href = "/gallery";
         } else {
             history.pushState({keyword:e.target.name}, e.target.name, e.target.id);
-            keyword = e.target.name;
-            playNext(e.target.name);
+            searchParams = {
+                publishedBefore: "2019-01-01T00:00:00Z",
+                relevanceLanguage: "en",
+                duration: "any",
+                keyword: e.target.name
+            }
+            playNext(searchParams);
         }
     }
 
     window.onpopstate = function(e){
         if(e.state){
-            // console.log(e.state.keyword);
-            keyword = e.state.keyword;
+            searchParams.keyword = e.state.keyword;
             playNext(e.state.keyword);
             // document.getElementById("content").innerHTML = e.state.html;
             // document.title = e.state.pageTitle;

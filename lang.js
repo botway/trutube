@@ -58,7 +58,6 @@ module.exports = [
     "is",
     "tr",
     "es",
-    "udm",
     "kk",
     "uz",
     "kn",
@@ -93,3 +92,4 @@ module.exports = [
 // "pap",
 // "mrj",
 // "ceb",
+// "udm",

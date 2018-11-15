@@ -11,15 +11,17 @@
         <script src="http://www.youtube.com/player_api"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script>
-            // $( "#date" ).slider();
             var data = <%-JSON.stringify(data[0]) %>;
-            var keyword="";
+            var searchParams = {
+                keyword:""
+            };
 
-            function playNext(keyword){
+            function playNext(params){
                 axios.get("/randomvid",{
                     params:{
-                        keyword: keyword,
-                        translate: null
+                        keyword: params.keyword,
+                        publishedBefore: params.publishedBefore,
+                        relevanceLanguage: params.relevanceLanguage
                     }
                 }).then(result => {
                     data = result.data[0];

@@ -46,9 +46,12 @@
             }
         </script>
         <%- include('nav'); -%>
-        <%- include('player'); -%>
-        <div id="date"></div>
-        <%- include('controls'); -%>
+        <% if(data.length > 1) { %>
+            <%- include('gallery',{vids: data}); -%>
+        <% } else { %>
+            <%- include('player'); -%>
+            <%- include('controls'); -%>
+        <% } %>
         <%- include('footer'); -%>
     </body>
 </html>

@@ -9,13 +9,17 @@
     nav.addEventListener("click", handleClik);
 
     function handleClik(e){
-        history.pushState({keyword:e.target.name}, e.target.name, e.target.id);
-        if(e.target.id == "gallery"){
-            console.log("go to gallery");
-            return;
+        if(location.pathname == "/gallery"){
+            keyword = e.target.name;
+            window.location.href = "/";
         }
-        keyword = e.target.name;
-        playNext(e.target.name);
+        if(e.target.id == "gallery"){
+            window.location.href = "/gallery";
+        } else {
+            history.pushState({keyword:e.target.name}, e.target.name, e.target.id);
+            keyword = e.target.name;
+            playNext(e.target.name);
+        }
     }
 
     window.onpopstate = function(e){

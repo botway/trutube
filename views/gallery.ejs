@@ -1,0 +1,10 @@
+<div class="gallery">
+    <% vids.forEach(function(vid) {%>
+        <div class="thumbnail">
+            <a href="<%= vid.url %>">
+                <h3><%= vid.title %></h3>
+                <img src="https://img.youtube.com/vi/<%= vid.id %>/0.jpg">
+            </a>
+        </div>
+    <% }); %>
+</div>

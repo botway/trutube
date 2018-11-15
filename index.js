@@ -30,18 +30,15 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", async (req, res) => {
+    console.log("main");
     const phrase = genPhrase(2, 4);
     const translate = await transPhrase(phrase, null);
     const result = await getVideos(translate, 1);
     res.render("main", { data: result });
-    // db.each("SELECT * from Vid_IDs", function(err, row) {
-    //     if (row) {
-    //         console.log("record:", row);
-    //     }
-    // });
 });
 
 app.get("/randomvid", async (req, res) => {
+    console.log("random vid");
     let phrase = `${req.query.keyword} ${genPhrase(2, 4)}`;
     if (req.query.translate)
         phrase = await transPhrase(phrase, req.query.translate);
@@ -61,6 +58,20 @@ app.post("/savevid", async (req, res) => {
             res.json({ data: this.lastID });
         });
     });
+});
+
+app.get("/gallery", async (req, res) => {
+    console.log("gallery");
+    let promises = [];
+    const data = await db.getAsync(
+        "SELECT * from Vid_IDs ORDER BY rowid DESC LIMIT 10"
+    );
+    // console.log(data);
+    data.forEach(elem => {
+        promises.push(youtube.getVideoByID(elem.vid_id));
+    });
+    const vids = await Promise.all(promises);
+    res.render("main", { data: vids });
 });
 
 const getVideos = async (query, amount) => {

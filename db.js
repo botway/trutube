@@ -13,4 +13,14 @@ db.serialize(function() {
     }
 });
 
+module.exports = db.getAsync = function(sql) {
+    var that = this;
+    return new Promise(function(resolve, reject) {
+        that.all(sql, function(err, row) {
+            if (err) reject(err);
+            else resolve(row);
+        });
+    });
+};
+
 module.exports.db = db;

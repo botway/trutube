@@ -1,9 +1,10 @@
-<h1></h1>
+<h1 id="title"></h1>
 <div id="player"></div>
-<h3></h3>
+<h3 id="published"></h3>
+<script src="http://www.youtube.com/player_api"></script>
 <script>
-        var title = document.getElementsByTagName("H1")[0]
-        var published = document.getElementsByTagName("H3")[0]
+        var title = document.getElementById("title");
+        var published = document.getElementById("published");
         title.innerHTML = data.title;
         published.innerHTML ="published at " + clearDate(data.publishedAt);
         // create youtube player

@@ -1,3 +1,13 @@
 body, html{
-    background-color: black;
+    height: 95vh;
+    font-family: monospace;
+    /* background-color: black; */
+}
+
+#landing{
+    text-align: center;
+    position: relative;
+    top: 45%;
+    transform: translateY(-50%);
+    font-size: 2em;
 }

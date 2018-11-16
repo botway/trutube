@@ -3,13 +3,11 @@
     <head>
         <meta charset="utf-8">
         <title>TRUTUBE</title>
-        <link rel="stylesheet" href="./css/jquery-ui.min.css">
+        <link rel="stylesheet" href="./css/styles.css">
     </head>
     <body>
-        <script src="js/jquery.js"></script>
-        <script src="js/jquery-ui.min.js"></script>
-        <script src="http://www.youtube.com/player_api"></script>
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="./js/axios.min.js"></script>
+        <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
         <script>
             var data = <%-JSON.stringify(data[0]) %>;
             var searchParams = {
@@ -47,6 +45,7 @@
                return str.slice(0,-14)
             }
         </script>
+        <h2 id="logo">trutube</h2>
         <%- include('nav'); -%>
         <% if(data.length > 1) { %>
             <%- include('gallery',{vids: data}); -%>

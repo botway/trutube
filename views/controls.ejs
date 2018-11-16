@@ -9,7 +9,11 @@
     <option value="sp">Spanish</option>
     <option value="fr">French</option>
     <option value="ar">Arabic</option>
+    <option value="he">Hebrew</option>
+    <option value="tr">Turkish</option>
     <option value="jp">Japaneese</option>
+    <option value="ch">Chinese</option>
+    <option value="ko">Korean</option>
 </select>
 <select id="duration">
     <option value="any" selected>Any duration</option>
@@ -19,7 +23,7 @@
 </select>
 <div class="slidecontainer">
     <p id="yearDisp"></p>
-    <input type="range" min="2005" max="2018" value="2008" class="slider" id="yearSlider">
+    <input type="range" min="2005" max="2018" value="2018" class="slider" id="yearSlider">
 </div>
 <script>
     var next = document.getElementById("next");
@@ -28,14 +32,14 @@
     var yearDisp = document.getElementById("yearDisp");
     var lang = document.getElementById("lang");
     var duration = document.getElementById("duration");
-    yearDisp.innerHTML = "published before " + year.value;
+    yearDisp.innerHTML = "published " + year.value;
 
     year.oninput = function() {
-        yearDisp.innerHTML = "published before " + this.value;
+        yearDisp.innerHTML = "published " + this.value;
     }
 
     next.addEventListener("click", function(){
-        searchParams.publishedBefore = year.value + 1 + "-01-01T00:00:00Z";
+        searchParams.publishedBefore = (Number(year.value) + 1) + "-01-01T00:00:00Z";
         searchParams.relevanceLanguage = lang.value;
         searchParams.duration = duration.value;
         playNext(searchParams);

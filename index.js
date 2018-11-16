@@ -30,13 +30,17 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", async (req, res) => {
+    res.render("landing");
+});
+
+app.get("/home", async (req, res) => {
     const lang = getRandomLang();
     const params = {
         publishedBefore: "2018-01-01T00:00:00Z",
         relevanceLanguage: lang,
         duration: "any"
     };
-    let phrase = genPhrase(1, 4);
+    let phrase = genPhrase(1, 3);
     phrase = await transPhrase(phrase, lang);
     const result = await getVideos(phrase, 1, params);
     res.render("main", { data: result });
@@ -78,9 +82,35 @@ app.get("/gallery", async (req, res) => {
     data.forEach(elem => {
         promises.push(youtube.getVideoByID(elem.vid_id));
     });
-    const vids = await Promise.all(promises);
-    res.render("main", { data: vids });
+    try{
+        const vids = await Promise.all(promises);
+        res.render("main", { data: vids });
+    } catch(e){
+        return e.console;
+    }
 });
+
+app.get("/music", async (req,res)=>{
+    const params = {
+        publishedBefore: "2018-01-01T00:00:00Z",
+        relevanceLanguage: "en",
+        duration: "any"
+    };
+    let phrase = "music song " + genPhrase(1, 3);
+    const result = await getVideos(phrase, 1, params);
+    res.render("main", { data: result });
+})
+
+app.get("/trailers", async (req,res)=>{
+    const params = {
+        publishedBefore: "2018-01-01T00:00:00Z",
+        relevanceLanguage: "en",
+        duration: "any"
+    };
+    let phrase = "movie trailer " + genPhrase(1, 3);
+    const result = await getVideos(phrase, 1, params);
+    res.render("main", { data: result });
+})
 
 const getVideos = async (query, amount, params) => {
     console.log(query, params);
@@ -91,9 +121,12 @@ const getVideos = async (query, amount, params) => {
         publishedBefore: params.publishedBefore,
         relevanceLanguage: params.relevanceLanguage
     };
-    // publishedBefore: "2009-01-01T00:00:00Z"
-    const videos = await youtube.searchVideos(query, amount, options);
-    return videos;
+    try {
+        const videos = await youtube.searchVideos(query, amount, options);
+        return videos;
+    } catch(e){
+        return e.error;
+    }
 };
 
 const transPhrase = async (phrase, lang) => {
@@ -112,4 +145,4 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-app.listen(8080, () => console.log("listening on 8080"));
+app.listen(process.env.PORT || 8080, () => console.log("listening on 8080"));

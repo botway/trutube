@@ -14,10 +14,14 @@ const util = require("util");
 exports.app = app;
 
 let secrets;
-if (process.env.NODE_ENV == "production") {
-    secrets = process.env; // in prod the secrets are environment variables
+
+if (process.env.ENVIRONMENT == "production") {
+    secrets = {
+      "youtube_key": process.env.YOUTUBE,
+      "yandex_key": process.env.YANDEX
+    }
 } else {
-    secrets = require("./secrets.json"); // secrets.json is in .gitignore
+    secrets = require("./secrets.json");
 }
 
 const youtube = new YouTube(secrets.youtube_key);
@@ -62,7 +66,6 @@ app.get("/randomvid", async (req, res) => {
 });
 
 app.post("/savevid", async (req, res) => {
-    console.log("savevid", req.body);
     //prettier-ignore
     db.serialize(() => {
         db.run(`INSERT INTO Vid_IDs (vid_id) VALUES(?)`, [req.body.id], function(err){
@@ -77,7 +80,7 @@ app.post("/savevid", async (req, res) => {
 app.get("/gallery", async (req, res) => {
     let promises = [];
     const data = await db.getAsync(
-        "SELECT * from Vid_IDs ORDER BY rowid DESC LIMIT 5"
+        "SELECT * from Vid_IDs ORDER BY rowid DESC LIMIT 30"
     );
     data.forEach(elem => {
         promises.push(youtube.getVideoByID(elem.vid_id));
@@ -88,6 +91,25 @@ app.get("/gallery", async (req, res) => {
     } catch(e){
         return e.console;
     }
+});
+
+app.get("/gallery/more", async (req, res) => {
+    let promises = [];
+    let last = req.query.last
+    const data = await db.getAsync(
+        `SELECT * from Vid_IDs WHERE rowid < ${all-5} ORDER BY rowid DESC LIMIT 5`
+    );
+    res.json(data);
+    // console.log("data", data);
+    // data.forEach(elem => {
+    //     promises.push(youtube.getVideoByID(elem.vid_id));
+    // });
+    // try{
+    //     const vids = await Promise.all(promises);
+    //     res.json({ data: vids });
+    // } catch(e){
+    //     return e.console;
+    // }
 });
 
 app.get("/music", async (req,res)=>{

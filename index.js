@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 const path = require("path");
 const { rword } = require("rword");
 const randomWords = require("random-words");
@@ -8,8 +8,10 @@ const translate = require("translate");
 const searchYoutube = require("youtube-api-v3-search");
 const YouTube = require("simple-youtube-api");
 const langArr = require("./lang");
+const youtubeLangArr = require("./youtubelang");
 const db = require("./db").db;
 const util = require("util");
+const fs = require("fs");
 
 exports.app = app;
 
@@ -35,6 +37,12 @@ app.set("view engine", "ejs");
 
 app.get("/", async (req, res) => {
     res.render("landing");
+    const langs=[];
+    youtubeLangArr.forEach((el)=>{
+        langs.push(el.id)
+    })
+    console.log(langs);
+    writeFile(JSON.stringify(langs))
 });
 
 app.get("/home", async (req, res) => {
@@ -47,6 +55,10 @@ app.get("/home", async (req, res) => {
     let phrase = genPhrase(1, 3);
     phrase = await transPhrase(phrase, lang);
     const result = await getVideos(phrase, 1, params);
+    if(result == []) {
+        console.log("repeat get home");
+        app.get("/home");
+    }
     res.render("main", { data: result });
 });
 
@@ -80,7 +92,7 @@ app.post("/savevid", async (req, res) => {
 app.get("/gallery", async (req, res) => {
     let promises = [];
     const data = await db.getAsync(
-        "SELECT * from Vid_IDs ORDER BY rowid DESC LIMIT 30"
+        "SELECT * from Vid_IDs ORDER BY rowid DESC LIMIT 10"
     );
     data.forEach(elem => {
         promises.push(youtube.getVideoByID(elem.vid_id));
@@ -97,7 +109,7 @@ app.get("/gallery/more", async (req, res) => {
     let promises = [];
     let last = req.query.last
     const data = await db.getAsync(
-        `SELECT * from Vid_IDs WHERE rowid < ${all-5} ORDER BY rowid DESC LIMIT 5`
+        `SELECT * from Vid_IDs WHERE rowid < ${last} ORDER BY rowid DESC LIMIT 5`
     );
     res.json(data);
     // console.log("data", data);
@@ -147,6 +159,7 @@ const getVideos = async (query, amount, params) => {
         const videos = await youtube.searchVideos(query, amount, options);
         return videos;
     } catch(e){
+        console.log("err in vid", e)
         return e.error;
     }
 };
@@ -165,6 +178,13 @@ function getRandomLang() {
 }
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function writeFile(data){
+    fs.writeFile('temp.txt', data, function(err, data){
+    if (err) console.log(err);
+    console.log("Successfully Written to File.");
+});
 }
 
 app.listen(process.env.PORT || 8080, () => console.log("listening on 8080"));

@@ -8,30 +8,35 @@
         </div>
     <% }); %>
 </div>
-<!-- <button id="more">MORE</button> -->
+<button id="more">MORE</button>
 <script>
-    var lastVid = 5;
+    var lastVid = <%- last %>;
+    console.log("last",lastVid);
     var gall = document.getElementById("gall");
     var more = document.getElementById("more");
     more.addEventListener("click",function(){
 
         axios.get("gallery/more",{
             params:{
-                last:lastVid
+                last: lastVid
             }
         }).then(function(result){
-            console.log(result);
-            var html;
-            result.data.forEach(function(el){
+            lastVid = result.data.last;
+            var html="";
+            result.data.vids.forEach(function(el){
                 html+= `<div class="thumbnail">
-                    <a href="${el.url}">
-                        <h3>${el.title}</h3>
-                        <img src="https://img.youtube.com/vi/${el.id}/0.jpg">
-                    </a>
-                </div>`
+                            <a href="${el.url}">
+                                <h3>${el.title}</h3>
+                                <img src="https://img.youtube.com/vi/${el.id}/0.jpg">
+                            </a>
+                        </div>`
             })
             gall.innerHTML += html;
-            lastVid +=5;
+            window.scrollBy({
+              top: 800,
+              behavior: 'smooth'
+            });
+            if(lastVid <=1) more.style.display = "none";
         })
     })
 </script>

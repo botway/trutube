@@ -37,12 +37,12 @@ app.set("view engine", "ejs");
 
 app.get("/", async (req, res) => {
     res.render("landing");
-    const langs=[];
-    youtubeLangArr.forEach((el)=>{
-        langs.push(el.id)
-    })
-    console.log(langs);
-    writeFile(JSON.stringify(langs))
+    // const langs=[];
+    // youtubeLangArr.forEach((el)=>{
+    //     langs.push(el.id)
+    // })
+    // console.log(langs);
+    // writeFile(JSON.stringify(langs))
 });
 
 app.get("/home", async (req, res) => {
@@ -91,15 +91,18 @@ app.post("/savevid", async (req, res) => {
 
 app.get("/gallery", async (req, res) => {
     let promises = [];
+    const limit = 10;
+    let last;
     const data = await db.getAsync(
-        "SELECT * from Vid_IDs ORDER BY rowid DESC LIMIT 10"
+        `SELECT *,rowid from Vid_IDs ORDER BY rowid DESC LIMIT ${limit}`
     );
+    last = data[0].rowid - limit + 1;
     data.forEach(elem => {
         promises.push(youtube.getVideoByID(elem.vid_id));
     });
     try{
         const vids = await Promise.all(promises);
-        res.render("main", { data: vids });
+        res.render("main", { data: vids, last:last });
     } catch(e){
         return e.console;
     }
@@ -108,20 +111,21 @@ app.get("/gallery", async (req, res) => {
 app.get("/gallery/more", async (req, res) => {
     let promises = [];
     let last = req.query.last
+    const limit = 5;
     const data = await db.getAsync(
-        `SELECT * from Vid_IDs WHERE rowid < ${last} ORDER BY rowid DESC LIMIT 5`
+        `SELECT *, rowid from Vid_IDs
+            WHERE rowid < ${last} ORDER BY rowid DESC LIMIT ${limit}`
     );
-    res.json(data);
-    // console.log("data", data);
-    // data.forEach(elem => {
-    //     promises.push(youtube.getVideoByID(elem.vid_id));
-    // });
-    // try{
-    //     const vids = await Promise.all(promises);
-    //     res.json({ data: vids });
-    // } catch(e){
-    //     return e.console;
-    // }
+    last = data[0].rowid - limit + 1;
+    data.forEach(elem => {
+        promises.push(youtube.getVideoByID(elem.vid_id));
+    });
+    try{
+        const vids = await Promise.all(promises);
+        res.json({ vids: vids, last: last });
+    } catch(e){
+        return e.console;
+    }
 });
 
 app.get("/music", async (req,res)=>{
@@ -184,7 +188,7 @@ function writeFile(data){
     fs.writeFile('temp.txt', data, function(err, data){
     if (err) console.log(err);
     console.log("Successfully Written to File.");
-});
+    });
 }
 
 app.listen(process.env.PORT || 8080, () => console.log("listening on 8080"));

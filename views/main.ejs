@@ -49,7 +49,7 @@
         <h2 id="logo">trutube</h2>
         <%- include('nav'); -%>
         <% if(data.length > 1) { %>
-            <%- include('gallery',{vids: data}); -%>
+            <%- include('gallery',{vids: data, last:last}); -%>
         <% } else { %>
             <%- include('player'); -%>
             <%- include('controls'); -%>

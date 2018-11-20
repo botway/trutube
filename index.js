@@ -136,20 +136,22 @@ app.get("/music", async (req,res)=>{
         relevanceLanguage: "en",
         duration: "any"
     };
-    let phrase = "music song " + genPhrase(1, 3);
-    const result = await getVideos(phrase, 1, params);
+    let phrase = "music " + genPhrase(1, 3);
+    let result = await getVideos(phrase, 1, params);
+    result[0].keyword = "music ";
     res.render("main", { data: result });
 })
 
-app.get("/trailers", async (req,res)=>{
+app.get("/movies", async (req,res)=>{
     const params = {
         publishedBefore: "2018-01-01T00:00:00Z",
         relevanceLanguage: "en",
         duration: "any"
     };
-    let phrase = "movie trailer " + genPhrase(1, 3);
-    const result = await getVideos(phrase, 1, params);
-    res.render("main", { data: result });
+    let phrase = "movie " + genPhrase(1, 3);
+    let result = await getVideos(phrase, 1, params);
+    result[0].keyword = "movie ";
+    res.render("main", { data: result});
 })
 
 const getVideos = async (query, amount, params) => {

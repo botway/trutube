@@ -10,13 +10,13 @@
         // published.innerHTML = clearDate(data.publishedAt);
         // create youtube player
         var videoId = data.id;
+        searchParams.keyword = data.keyword;
         var player;
         var playerW = container.clientWidth;
         var resizeTimer;
         window.addEventListener("resize",resizePlayer);
 
         function onYouTubePlayerAPIReady() {
-            console.log(container.clientWidth);
            player = new YT.Player('player', {
              width: playerW,
              height: Number(container.clientWidth * 0.609),

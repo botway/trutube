@@ -16,7 +16,6 @@
                 keyword:""
             };
             function playNext(params){
-                console.log(params.keyword);
                 axios.get("/randomvid",{
                     params:{
                         keyword: params.keyword,
@@ -25,7 +24,6 @@
                     }
                 }).then(result => {
                     data = result.data[0];
-                    console.log(result);
                     videoId = result.data[0].id;
                     title.innerHTML = result.data[0].title
                     // published.innerHTML = "published at " + clearDate(result.data[0].publishedAt)
@@ -33,6 +31,11 @@
                          videoId: videoId,
                          startSeconds: 0
                      })
+                     if(like.isLiked){
+                         like.classList.remove("selected");
+                         likeInfo.style.display = "none";
+                         like.isLiked = false;
+                     }
                 })
             }
 

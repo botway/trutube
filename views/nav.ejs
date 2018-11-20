@@ -1,6 +1,6 @@
 <div id="nav">
     <button name="" id="home"> TRUTUBE </button>
-    <button name="movie trailer" id="trailers"> TRAILERS </button>
+    <button name="movie " id="movies"> MOVIES </button>
     <button name="music song" id="music"> MUSIC </button>
     <button id="gallery"> GALLERY </button>
 </div>
@@ -10,7 +10,7 @@
     nav.addEventListener("click", handleClik);
     //there should be a better solution
     location.pathname == "/home" && buttons[0].classList.add("selected");
-    location.pathname == "/trailers" && buttons[1].classList.add("selected");
+    location.pathname == "/movies" && buttons[1].classList.add("selected");
     location.pathname == "/music" && buttons[2].classList.add("selected");
     location.pathname == "/gallery" && buttons[3].classList.add("selected");
 

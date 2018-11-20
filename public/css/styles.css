@@ -10,6 +10,18 @@ body, html{
     transform: translateY(-50%);
     font-size: 2em;
 }
+/* .mainTitle{
+
+} */
+.subtitle{
+    position: relative;
+    top:40vh;
+    font-size: 1em;
+    color: dimgrey;
+}
+a {
+    color: darkred;
+}
 #container{
     width: 80vw;
     margin: 0 auto;
@@ -68,8 +80,8 @@ select{
 }
 #likeInfo{
     float: right;
-    margin-top: 0.4em;
-    margin-right: 0.5em;
+    margin-top: 0.5em;
+    margin-right: 1em;
 }
 #title{
 

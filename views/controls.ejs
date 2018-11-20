@@ -60,13 +60,12 @@
         searchParams.publishedBefore = (Number(year.value) + 1) + "-01-01T00:00:00Z";
         searchParams.relevanceLanguage = lang.value;
         searchParams.duration = duration.value;
-        like.classList.remove("selected");
-        likeInfo.style.display = "none";
         playNext(searchParams);
     });
 
     like.addEventListener("click", function(){
         saveVidId(data.id);
+        like.isLiked = true;
         like.classList.add("selected");
         likeInfo.style.display = "inherit";
     });

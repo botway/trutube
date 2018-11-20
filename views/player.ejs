@@ -3,6 +3,7 @@
 <div id="player"></div>
 <script src="https://www.youtube.com/player_api"></script>
 <script>
+        var container = document.getElementById("container");
         var title = document.getElementById("title");
         var published = document.getElementById("published");
         title.innerHTML = data.title;
@@ -10,11 +11,15 @@
         // create youtube player
         var videoId = data.id;
         var player;
-        var playerW = Number(window.innerWidth * 0.85)
+        var playerW = container.clientWidth;
+        var resizeTimer;
+        window.addEventListener("resize",resizePlayer);
+
         function onYouTubePlayerAPIReady() {
+            console.log(container.clientWidth);
            player = new YT.Player('player', {
              width: playerW,
-             height: Number(playerW * 0.609),
+             height: Number(container.clientWidth * 0.609),
              videoId: videoId,
              events: {
                onReady: onPlayerReady,
@@ -33,5 +38,13 @@
            if(event.data === 0) {
                playNext(searchParams)
            }
+        }
+
+        function resizePlayer(){
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function(){
+                player.a.width = container.clientWidth;
+                player.a.height = Number(container.clientWidth * 0.609);
+            },100);
         }
    </script>

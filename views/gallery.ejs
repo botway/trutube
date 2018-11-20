@@ -1,4 +1,4 @@
-<div class="gallery" id="gall">
+<div class="gallery" id="galleryContainer">
     <% vids.forEach(function(vid) {%>
         <div class="thumbnail">
             <a href="<%= vid.url %>">
@@ -11,7 +11,7 @@
 <button id="scrollMore">MORE</button>
 <script>
     var lastVid = <%- last %>;
-    var gall = document.getElementById("gall");
+    var gall = document.getElementById("galleryContainer");
     var more = document.getElementById("scrollMore");
     more.addEventListener("click",function(){
 
@@ -33,11 +33,6 @@
                         </div>`
             })
             gall.innerHTML += html;
-            // console.log(lastElem.pageOffsetHeight);
-            // window.scrollTo({
-            //     top: scrollHeight,
-            //     behavior: 'smooth'
-            // });
             if(lastVid <=1) more.style.display = "none";
         })
     })

@@ -10,16 +10,20 @@ body, html{
     transform: translateY(-50%);
     font-size: 2em;
 }
-.container{
-    width: 85vw;
+#container{
+    width: 80vw;
     margin: 0 auto;
     margin-top: 2em;
+}
+#galleryContainer{
+    width: 25em;
 }
 .thumbnail img{
     width: 25em;
 }
 #nav{
-    margin-bottom: 2em;
+    margin-bottom: 1em;
+    display: inline-block;
 }
 
 button {
@@ -77,4 +81,16 @@ select{
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+}
+
+@media only screen and (min-width: 1024px) {
+    #container{
+        width: 60vw;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    #container{
+        width: 95vw;
+    }
 }

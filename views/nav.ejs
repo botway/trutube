@@ -8,9 +8,14 @@
     var nav = document.getElementById("nav");
     var buttons = nav.querySelectorAll("button");
     nav.addEventListener("click", handleClik);
+    //there should be a better solution
     location.pathname == "/home" && buttons[0].classList.add("selected");
+    location.pathname == "/trailers" && buttons[1].classList.add("selected");
+    location.pathname == "/music" && buttons[2].classList.add("selected");
+    location.pathname == "/gallery" && buttons[3].classList.add("selected");
 
     function handleClik(e){
+        if(e.target.id=="nav") return;
         highlite(e.target);
         if(e.target.id == "gallery"){
             window.location.href = "/gallery";

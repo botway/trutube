@@ -33,6 +33,10 @@
                         </div>`
             })
             gall.innerHTML += html;
+            window.scrollBy({
+                top:window.outerHeight,
+                behavior: 'smooth'
+            });
             if(lastVid <=1) more.style.display = "none";
         })
     })

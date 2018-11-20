@@ -162,7 +162,12 @@ const getVideos = async (query, amount, params) => {
         relevanceLanguage: params.relevanceLanguage
     };
     try {
-        const videos = await youtube.searchVideos(query, amount, options);
+        let videos = await youtube.searchVideos(query, amount, options);
+        if(videos.length == 0 ) {
+            console.log("res is empty, retrying");
+            options.publishedBefore = "2018-01-01T00:00:00Z";
+            videos = await youtube.searchVideos(`${params.keyword} ${genPhrase(1, 3)}`, amount, options);
+        }
         return videos;
     } catch(e){
         console.log("err in vid", e)

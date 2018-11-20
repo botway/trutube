@@ -3,7 +3,6 @@ body, html{
     font-family: monospace;
     /* background-color: black; */
 }
-
 #landing{
     text-align: center;
     position: relative;
@@ -11,7 +10,71 @@ body, html{
     transform: translateY(-50%);
     font-size: 2em;
 }
-
+.container{
+    width: 85vw;
+    margin: 0 auto;
+    margin-top: 2em;
+}
 .thumbnail img{
     width: 25em;
+}
+#nav{
+    margin-bottom: 2em;
+}
+
+button {
+    border-radius: 0.3em;
+    background-color: lightgrey;
+    border: none;
+    padding: 0.25em 0.65em;
+    font-family: monospace;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+button:hover, .selected {
+    background-color: darkred;
+    color: white;
+    cursor: pointer;
+}
+.controls{
+    margin-top: 1em;
+}
+select{
+    border-radius: 0.3em;
+    border: 1px solid lightgrey;
+    padding: 0.25em;
+    font-family: monospace;
+}
+#moreParams{
+    display: inline-block;
+    text-decoration: underline;
+    margin-top: 0.25em;
+    margin-left: 0.7em;
+}
+#moreParams:hover{
+    color: darkred;
+    text-decoration: none;
+    cursor: pointer;
+}
+#like{
+    float: right;
+    font-size: 1.2em;
+    padding: 0.25em 0.5em;
+}
+#likeInfo{
+    float: right;
+    margin-top: 0.4em;
+    margin-right: 0.5em;
+}
+#title{
+
+}
+#published{
+    float: right;
+}
+#next{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }

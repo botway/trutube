@@ -8,11 +8,11 @@
         </div>
     <% }); %>
 </div>
-<button id="more">MORE</button>
+<button id="scrollMore">MORE</button>
 <script>
     var lastVid = <%- last %>;
     var gall = document.getElementById("gall");
-    var more = document.getElementById("more");
+    var more = document.getElementById("scrollMore");
     more.addEventListener("click",function(){
 
         axios.get("gallery/more",{

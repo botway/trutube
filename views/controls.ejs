@@ -1,42 +1,56 @@
-<button id="next">NEXT</button>
-<button id="like">LIKE</button>
-<select id="lang">
-    <option value="rnd" selected>Random Language</option>
-    <option value="en">English</option>
-    <option value="ru">Russian</option>
-    <option value="pl">Polish</option>
-    <option value="de">German</option>
-    <option value="ar">Arabic</option>
-    <option value="hi">Hindi</option>
-    <option value="es">Spanish</option>
-    <option value="fr">French</option>
-    <option value="pt">Portuguese</option>
-    <option value="it">Italian</option>
-    <option value="el">Greek</option>
-    <option value="he">Hebrew</option>
-    <option value="tr">Turkish</option>
-    <option value="ja">Japanese</option>
-    <option value="zh">Chinese</option>
-    <option value="ko">Korean</option>
-</select>
-<select id="duration">
-    <option value="any" selected>Any duration</option>
-    <option value="short">Short</option>
-    <option value="medium">Medium</option>
-    <option value="long">Long</option>
-</select>
-<div class="slidecontainer">
-    <p id="yearDisp"></p>
-    <input type="range" min="2005" max="2018" value="2018" class="slider" id="yearSlider">
+<div class="controls">
+    <select id="lang">
+        <option value="rnd" selected>Random Language</option>
+        <option value="en">English</option>
+        <option value="ru">Russian</option>
+        <option value="pl">Polish</option>
+        <option value="de">German</option>
+        <option value="ar">Arabic</option>
+        <option value="hi">Hindi</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="pt">Portuguese</option>
+        <option value="it">Italian</option>
+        <option value="el">Greek</option>
+        <option value="he">Hebrew</option>
+        <option value="tr">Turkish</option>
+        <option value="ja">Japanese</option>
+        <option value="zh">Chinese</option>
+        <option value="ko">Korean</option>
+    </select>
+    <button id="next">NEXT</button>
+    <button id="like">❤</button>
+    <p id="likeInfo" style="display:none">saved to gallery</p>
+    <p id="moreParams">more</p>
+    <div id="extra" style="display:none">
+        <select id="duration">
+            <option value="any" selected>Any duration</option>
+            <option value="short">Short</option>
+            <option value="medium">Medium</option>
+            <option value="long">Long</option>
+        </select>
+        <div class="slidecontainer">
+            <p id="yearDisp"></p>
+            <input type="range" min="2005" max="2018" value="2018" class="slider" id="yearSlider">
+        </div>
+    </div>
 </div>
 <script>
     var next = document.getElementById("next");
     var like = document.getElementById("like");
+    var likeInfo = document.getElementById("likeInfo");
     var year = document.getElementById("yearSlider");
     var yearDisp = document.getElementById("yearDisp");
     var lang = document.getElementById("lang");
+    var extra = document.getElementById("extra");
+    var moreParams = document.getElementById("moreParams");
     var duration = document.getElementById("duration");
     yearDisp.innerHTML = "published " + year.value;
+
+    moreParams.addEventListener("click", function(){
+        extra.style.display == "none" ?
+            extra.style.display="inherit" : extra.style.display="none"
+    })
 
     year.oninput = function() {
         yearDisp.innerHTML = "published " + this.value;
@@ -46,10 +60,14 @@
         searchParams.publishedBefore = (Number(year.value) + 1) + "-01-01T00:00:00Z";
         searchParams.relevanceLanguage = lang.value;
         searchParams.duration = duration.value;
+        like.classList.remove("selected");
+        likeInfo.style.display = "none";
         playNext(searchParams);
     });
 
     like.addEventListener("click", function(){
         saveVidId(data.id);
+        like.classList.add("selected");
+        likeInfo.style.display = "inherit";
     });
 </script>

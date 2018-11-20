@@ -1,14 +1,17 @@
 <div id="nav">
-    <button name="" id="home"> HOME </button>
+    <button name="" id="home"> TRUTUBE </button>
     <button name="movie trailer" id="trailers"> TRAILERS </button>
     <button name="music song" id="music"> MUSIC </button>
     <button id="gallery"> GALLERY </button>
 </div>
 <script>
     var nav = document.getElementById("nav");
+    var buttons = nav.querySelectorAll("button");
     nav.addEventListener("click", handleClik);
+    location.pathname == "/home" && buttons[0].classList.add("selected");
 
     function handleClik(e){
+        highlite(e.target);
         if(e.target.id == "gallery"){
             window.location.href = "/gallery";
         } else if (location.pathname != "/gallery") {
@@ -26,11 +29,16 @@
             window.location.href = ("/" + e.target.id);
         }
     }
-
+    function highlite(elem){
+        [].forEach.call(buttons, function(el){
+            el.classList.remove("selected");
+        })
+        elem.classList.add("selected");
+    }
     window.onpopstate = function(e){
         if(e.state){
             searchParams.keyword = e.state.keyword;
-            playNext(e.state.keyword);
+            // playNext(e.state.keyword);
             // document.getElementById("content").innerHTML = e.state.html;
             // document.title = e.state.pageTitle;
             // console.log(document.location.pathname);

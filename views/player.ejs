@@ -1,19 +1,20 @@
-<h1 id="title"></h1>
+<h2 id="title"></h2>
+<!-- <h4 id="published"></h4> -->
 <div id="player"></div>
-<h3 id="published"></h3>
 <script src="https://www.youtube.com/player_api"></script>
 <script>
         var title = document.getElementById("title");
         var published = document.getElementById("published");
         title.innerHTML = data.title;
-        published.innerHTML ="published at " + clearDate(data.publishedAt);
+        // published.innerHTML = clearDate(data.publishedAt);
         // create youtube player
         var videoId = data.id;
         var player;
+        var playerW = Number(window.innerWidth * 0.85)
         function onYouTubePlayerAPIReady() {
            player = new YT.Player('player', {
-             width: '640',
-             height: '390',
+             width: playerW,
+             height: Number(playerW * 0.609),
              videoId: videoId,
              events: {
                onReady: onPlayerReady,

@@ -68,8 +68,8 @@ app.get("/randomvid", async (req, res) => {
             ? getRandomLang()
             : req.query.relevanceLanguage;
     req.query.relevanceLanguage = lang;
-    let phrase = `${req.query.keyword} ${genPhrase(1, 4)}`;
-    if (lang) {
+    let phrase = `${req.query.keyword} ${genPhrase(1, 3)}`;
+    if (lang && lang != "en") {
         phrase = await transPhrase(phrase, lang);
     }
     const result = await getVideos(phrase, 1, req.query);
@@ -102,6 +102,7 @@ app.get("/gallery", async (req, res) => {
     });
     try{
         const vids = await Promise.all(promises);
+        // console.log(vids);
         res.render("main", { data: vids, last:last });
     } catch(e){
         return e.console;
@@ -122,6 +123,7 @@ app.get("/gallery/more", async (req, res) => {
     });
     try{
         const vids = await Promise.all(promises);
+        // console.log("more",vids);
         res.json({ vids: vids, last: last });
     } catch(e){
         return e.console;

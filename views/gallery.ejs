@@ -11,7 +11,6 @@
 <button id="more">MORE</button>
 <script>
     var lastVid = <%- last %>;
-    console.log("last",lastVid);
     var gall = document.getElementById("gall");
     var more = document.getElementById("more");
     more.addEventListener("click",function(){
@@ -22,20 +21,23 @@
             }
         }).then(function(result){
             lastVid = result.data.last;
+            var lastElem = document.getElementsByClassName("thumbnail");
+            lastElem = lastElem[lastElem.length -1];
             var html="";
             result.data.vids.forEach(function(el){
                 html+= `<div class="thumbnail">
-                            <a href="${el.url}">
+                            <a href="https://www.youtube.com/watch?v=${el.id}">
                                 <h3>${el.title}</h3>
                                 <img src="https://img.youtube.com/vi/${el.id}/0.jpg">
                             </a>
                         </div>`
             })
             gall.innerHTML += html;
-            window.scrollBy({
-              top: 800,
-              behavior: 'smooth'
-            });
+            // console.log(lastElem.pageOffsetHeight);
+            // window.scrollTo({
+            //     top: scrollHeight,
+            //     behavior: 'smooth'
+            // });
             if(lastVid <=1) more.style.display = "none";
         })
     })

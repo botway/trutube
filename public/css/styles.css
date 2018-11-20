@@ -11,3 +11,7 @@ body, html{
     transform: translateY(-50%);
     font-size: 2em;
 }
+
+.thumbnail img{
+    width: 25em;
+}

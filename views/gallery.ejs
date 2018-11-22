@@ -1,3 +1,5 @@
+<input type="text" name="pasteId" id="pasteId" value="" placeholder="paste video id">
+<button id="saveId">SAVE</button>
 <div class="gallery" id="galleryContainer">
     <% vids.forEach(function(vid) {%>
         <div class="thumbnail">
@@ -10,8 +12,11 @@
 </div>
 <button id="scrollMore">MORE</button>
 <script>
+    console.log(data);
     var lastVid = <%- last %>;
     var gall = document.getElementById("galleryContainer");
+    var paste = document.getElementById("pasteId");
+    var save = document.getElementById("saveId");
     var more = document.getElementById("scrollMore");
     more.addEventListener("click",function(){
 
@@ -25,12 +30,7 @@
             lastElem = lastElem[lastElem.length -1];
             var html="";
             result.data.vids.forEach(function(el){
-                html+= `<div class="thumbnail">
-                            <a href="https://www.youtube.com/watch?v=${el.id}">
-                                <h3>${el.title}</h3>
-                                <img src="https://img.youtube.com/vi/${el.id}/0.jpg">
-                            </a>
-                        </div>`
+                html+= createThumb(el);
             })
             gall.innerHTML += html;
             window.scrollBy({
@@ -40,4 +40,34 @@
             if(lastVid <=1) more.style.display = "none";
         })
     })
+
+    function createThumb(el){
+        var thumb = `<div class="thumbnail">
+                    <a href="https://www.youtube.com/watch?v=${el.id}">
+                        <h3>${el.title}</h3>
+                        <img src="https://img.youtube.com/vi/${el.id}/0.jpg">
+                    </a>
+                </div>`
+        return thumb;
+    }
+
+    save.addEventListener("click",function(){
+        pasteId(paste.value)
+    })
+
+    function pasteId(id){
+        axios.post("/vidbyid",{ vidId: id }).then(function(result){
+            var html;
+            if(result.data.vid){
+                html = createThumb(result.data.vid);
+                saveVidId(id)
+            }else{
+                html= "No such video on youtube"
+            }
+            gall.innerHTML = html + gall.innerHTML;
+            paste.value="";
+        }).catch(function(err){
+            console.log(err);
+        })
+    }
 </script>

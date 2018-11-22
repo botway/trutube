@@ -105,9 +105,20 @@ app.get("/gallery", async (req, res) => {
         // console.log(vids);
         res.render("main", { data: vids, last:last });
     } catch(e){
-        return e.console;
+        return e.error();;
     }
 });
+
+app.post("/vidbyid", async(req,res) =>{
+    try{
+        console.log(req.body.vidId);
+        const vid = await youtube.getVideoByID(req.body.vidId)
+        res.json({vid: vid});
+    }catch(e){
+        console.log("err in getById", e.error);
+        res.json({vid: false});
+    }
+})
 
 app.get("/gallery/more", async (req, res) => {
     let promises = [];
@@ -126,7 +137,7 @@ app.get("/gallery/more", async (req, res) => {
         // console.log("more",vids);
         res.json({ vids: vids, last: last });
     } catch(e){
-        return e.console;
+        return e.error;
     }
 });
 

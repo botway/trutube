@@ -20,7 +20,24 @@ body, html{
     color: dimgrey;
 }
 a {
-    color: darkred;
+    color: black;
+}
+a:hover {
+    color: red;
+    text-decoration: none;
+}
+
+#enter{
+    text-decoration: none;
+    background-color: lightgrey;
+    color: black;
+    padding: 0.15em 0.4em;
+    border-radius: 0.25em;
+    font-size: 0.85em;
+}
+#enter:hover{
+    background-color: black;
+    color: red;
 }
 #container{
     width: 80vw;
@@ -48,15 +65,18 @@ button {
     font-weight: bold;
 }
 
-button:hover, .selected {
-    background-color: darkred;
-    color: white;
+button:hover {
+    color: red;
     cursor: pointer;
+}
+.selected{
+    background-color: black;
+    color: red;
 }
 .controls{
     margin-top: 1em;
 }
-select{
+select,input{
     border-radius: 0.3em;
     border: 1px solid lightgrey;
     padding: 0.25em;

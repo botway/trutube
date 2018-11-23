@@ -111,7 +111,6 @@ app.get("/gallery", async (req, res) => {
 
 app.post("/vidbyid", async(req,res) =>{
     try{
-        console.log(req.body.vidId);
         const vid = await youtube.getVideoByID(req.body.vidId)
         res.json({vid: vid});
     }catch(e){

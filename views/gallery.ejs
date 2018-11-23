@@ -10,16 +10,32 @@
         </div>
     <% }); %>
 </div>
-<button id="scrollMore">MORE</button>
+<!-- <button id="scrollMore">MORE</button> -->
 <script>
-    console.log(data);
+    console.log(<% vids %>);
     var lastVid = <%- last %>;
-    var gall = document.getElementById("galleryContainer");
+    var galCont = document.getElementById("galleryContainer");
     var paste = document.getElementById("pasteId");
     var save = document.getElementById("saveId");
     var more = document.getElementById("scrollMore");
-    more.addEventListener("click",function(){
+    var scrollTimer;
+    var fetching;
 
+    // more.addEventListener("click",loadMore)
+
+    window.addEventListener('scroll', function(){
+        if( lastVid <=1 || fetching) return;
+        if(scrollTimer) clearTimeout(scrollTimer);
+        if(window.scrollY + document.body.clientHeight + 500 >= document.body.scrollHeight){
+            scrollTimer = setTimeout(function(){
+                console.log("loadMore");
+                loadMore();
+            },100)
+        }
+    })
+
+    function loadMore(){
+        fetching = true;
         axios.get("gallery/more",{
             params:{
                 last: lastVid
@@ -32,15 +48,10 @@
             result.data.vids.forEach(function(el){
                 html+= createThumb(el);
             })
-            gall.innerHTML += html;
-            window.scrollBy({
-                top:window.outerHeight,
-                behavior: 'smooth'
-            });
-            if(lastVid <=1) more.style.display = "none";
+            galCont.innerHTML += html;
+            fetching = false;
         })
-    })
-
+    }
     function createThumb(el){
         var thumb = `<div class="thumbnail">
                     <a href="https://www.youtube.com/watch?v=${el.id}">
@@ -64,7 +75,7 @@
             }else{
                 html= "No such video on youtube"
             }
-            gall.innerHTML = html + gall.innerHTML;
+            galCont.innerHTML = html + galCont.innerHTML;
             paste.value="";
         }).catch(function(err){
             console.log(err);

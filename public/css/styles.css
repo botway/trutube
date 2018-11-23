@@ -43,9 +43,11 @@ a:hover {
     width: 80vw;
     margin: 0 auto;
     margin-top: 2em;
+    overflow: auto;
 }
 #galleryContainer{
     width: 25em;
+    overflow: auto;
 }
 .thumbnail img{
     width: 25em;
@@ -114,7 +116,6 @@ select,input{
     left: 50%;
     transform: translateX(-50%);
 }
-
 @media only screen and (min-width: 1024px) {
     #container{
         width: 60vw;

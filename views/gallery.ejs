@@ -10,9 +10,7 @@
         </div>
     <% }); %>
 </div>
-<!-- <button id="scrollMore">MORE</button> -->
 <script>
-    console.log(<% vids %>);
     var lastVid = <%- last %>;
     var galCont = document.getElementById("galleryContainer");
     var paste = document.getElementById("pasteId");
@@ -21,12 +19,10 @@
     var scrollTimer;
     var fetching;
 
-    // more.addEventListener("click",loadMore)
-
     window.addEventListener('scroll', function(){
         if( lastVid <=1 || fetching) return;
         if(scrollTimer) clearTimeout(scrollTimer);
-        if(window.scrollY + document.body.clientHeight + 500 >= document.body.scrollHeight){
+        if(window.scrollY + document.body.clientHeight + 700 >= document.body.scrollHeight){
             scrollTimer = setTimeout(function(){
                 console.log("loadMore");
                 loadMore();

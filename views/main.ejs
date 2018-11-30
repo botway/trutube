@@ -9,8 +9,8 @@
     <body>
         <script src="./js/axios.min.js"></script>
         <script src="./js/ejs.min.js"></script>
-        <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
         <script>
+            var container = document.getElementById('container');
             var data = <%-JSON.stringify(data[0]) %>;
             var searchParams = {
                 keyword:""
@@ -38,7 +38,6 @@
                      }
                 })
             }
-
             function saveVidId(id){
                 axios.post("/savevid",{ id: id })
                     .then(result => {
@@ -51,7 +50,6 @@
             }
         </script>
         <div id="container">
-            <!-- <h2 id="logo">trutube</h2> -->
             <%- include('nav'); -%>
             <% if(data.length > 1) { %>
                 <%- include('gallery',{vids: data, last:last}); -%>

@@ -55,10 +55,7 @@ app.get("/home", async (req, res) => {
     let phrase = genPhrase(1, 3);
     phrase = await transPhrase(phrase, lang);
     const result = await getVideos(phrase, 1, params);
-    if(result == []) {
-        console.log("repeat get home");
-        app.get("/home");
-    }
+    result[0].keyword = "";
     res.render("main", { data: result });
 });
 
@@ -188,8 +185,15 @@ const getVideos = async (query, amount, params) => {
 };
 
 const transPhrase = async (phrase, lang) => {
-    const translated = await translate(phrase, lang);
-    return translated;
+    try{
+        const translated = await translate(phrase, lang);
+        return translated;
+    }catch(e){
+        console.log(lang, e.error);
+        if(e){
+            transPhrase(phrase,"en");
+        }
+    }
 };
 
 const genPhrase = (min, max) => {

@@ -119,7 +119,7 @@ app.post("/vidbyid", async(req,res) =>{
 app.get("/gallery/more", async (req, res) => {
     let promises = [];
     let last = req.query.last
-    const limit = 5;
+    const limit = 7;
     const data = await db.getAsync(
         `SELECT *, rowid from Vid_IDs
             WHERE rowid < ${last} ORDER BY rowid DESC LIMIT ${limit}`
@@ -129,10 +129,11 @@ app.get("/gallery/more", async (req, res) => {
         promises.push(youtube.getVideoByID(elem.vid_id));
     });
     try{
-        const vids = await Promise.all(promises);
-        // console.log("more",vids);
-        res.json({ vids: vids, last: last });
+        const results = await Promise.all(promises.map(p => p.catch(e => e)));
+        const validResults = results.filter(result => !(result instanceof Error));
+        res.json({ vids: validResults , last: last });
     } catch(e){
+        console.log(e);
         return e.error;
     }
 });
